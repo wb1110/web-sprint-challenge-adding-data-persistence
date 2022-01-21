@@ -15,8 +15,13 @@ router.get('/', (req, res, next) => {
 
  
 router.post('/', (req, res, next) => {
-  res.json({ message: "Post!" })
-  next()
+  Projects.create(req.body)
+  .then(project => {
+    res.status(200).json(project)
+  })
+  .catch(err => {
+    next(err)
+  })
 })
  
 module.exports = router

@@ -2,35 +2,18 @@
 const db = require('../../data/dbConfig')
 
 async function get () {
+  const rows = await db('projects as p');
+  return rows;
+}
 
-
-  const rows = await db('projects');
-
-  // const result = {
-  //   project_id: rows[0].project_id,
-  //   project_name: rows[0].project_name,
-  //   project_description: rows[0].project_description,
-  //   project_completed: rows[0].project_completed === 0 ? false : true
-  // }
-  const result = {
-    project_id: rows[0].project_id,
-    project_name: rows[0].project_name,
-    project_description: rows[0].project_description,
-    project_completed: rows[0].project_completed === 0 ? false : true
-  }
-  // if (projects.project_completed === 0) {
-  //   projects.project_completed = 'false'
-  // }
-  // projects.forEach(project => {
-  //   if (!project.project_completed) {
-  //     project.project_completed === 'false'
-  //     } else {
-  //       project.project_completed === 'true'
-  //     }
-  //   })
-  return result;
+function create (project) {
+  return db('projects as p').insert(project)
+  .then(([project_id]) => {
+    return db('projects').where('project_id', project_id).first()
+  });
 }
 
 module.exports = {
-  get
+  get,
+  create
 }
